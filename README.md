@@ -170,6 +170,14 @@ Benchmark images are verified by SHA-256, but firmware dumps from tested devices
 
 The stable firmware is being preserved while experimental changes are developed in separate trees. Experimental results are promoted to the stable baseline only after repeatable verification.
 
+## ❤️ Support this project
+
+If you find this project useful and it has helped you in some way, please consider supporting its continued development.
+
+Your sponsorship helps fund hardware testing, improvements, maintenance and future versions of the project. Every contribution is greatly appreciated and helps keep this open-source work moving forward.
+
+**[Sponsor this project on GitHub](https://github.com/sponsors/joseonildo)**
+
 ## License and attribution
 
 The firmware lineage is GPLv3. This repository preserves upstream copyright and licensing requirements. See [CREDITS.md](CREDITS.md) before redistributing code or media.
