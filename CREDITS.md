@@ -90,6 +90,25 @@ These modifications and measurements do not erase or replace upstream authorship
 
 Do not assume that diagrams, pinout images or other media from an upstream project use the same license as its source code. When upstream media is reused, its individual license and attribution must be preserved. Where practical, this repository will prefer original diagrams/documentation or links to upstream material rather than copying media without a verified license.
 
+
+## AI-assisted development
+
+This optimization and benchmarking effort was developed with assistance from **ChatGPT by OpenAI**.
+
+ChatGPT was used as an AI-assisted engineering tool throughout the project, including:
+
+- technical discussion and troubleshooting;
+- analysis of benchmark and profiling results;
+- design and review of controlled optimization experiments;
+- generation and review of shell scripts used during testing;
+- organization and comparison of measurements;
+- documentation drafting and project-history reconstruction.
+
+Hardware work, firmware flashing, physical measurements, benchmark execution and validation were performed by the project owner. AI assistance does not replace or alter the authorship, copyright or licensing of any upstream project listed above.
+
+- ChatGPT: https://chatgpt.com/
+- OpenAI: https://openai.com/
+
 ## Thanks
 
 Thanks to the Libreboot contributors, Thomas Roth / stacksmashing, opensensor contributors, stm32-vserprog contributors, Raspberry Pi Pico SDK contributors, TinyUSB contributors, flashrom developers, and the broader open-source firmware and hardware community whose work made this project possible.
