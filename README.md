@@ -75,6 +75,77 @@ sudo flashrom -p serprog:dev=/dev/ttyACM0:spispeed=20M
 
 The stable prebuilt UF2 is distributed separately through the repository's **GitHub Releases**, allowing the source tree to remain free of build artifacts. Verify the published SHA-256 before flashing.
 
+## Beginner command examples
+
+After flashing the UF2 and reconnecting the Pico, Linux/WSL will normally expose the programmer as a serial device such as `/dev/ttyACM0`.
+
+First, check that the device exists:
+
+```bash
+ls -l /dev/ttyACM*
+```
+
+### 1. Detect the SPI flash
+
+Start with detection only. This does not intentionally modify the flash contents:
+
+```bash
+sudo flashrom -p serprog:dev=/dev/ttyACM0:spispeed=20M
+```
+
+flashrom should report the detected SPI NOR chip. The exact chip name depends on flashrom's database.
+
+### 2. Read a backup
+
+Always make a backup before erase/write operations:
+
+```bash
+sudo flashrom -p serprog:dev=/dev/ttyACM0:spispeed=20M -r backup.bin
+```
+
+Calculate its SHA-256:
+
+```bash
+sha256sum backup.bin
+```
+
+### 3. Recommended: read twice and compare
+
+Two identical independent reads are a useful basic check of the programmer, wiring and contacts:
+
+```bash
+sudo flashrom -p serprog:dev=/dev/ttyACM0:spispeed=20M -r backup-1.bin
+sudo flashrom -p serprog:dev=/dev/ttyACM0:spispeed=20M -r backup-2.bin
+sha256sum backup-1.bin backup-2.bin
+cmp backup-1.bin backup-2.bin && echo "OK: reads are identical"
+```
+
+If the hashes differ, **do not erase or write the chip**. Check the clip/socket, wiring, power and SPI speed first.
+
+### 4. Write an image
+
+> **Warning:** the following command modifies the SPI flash. Confirm that the image is correct for the target device and keep a verified backup first.
+
+```bash
+sudo flashrom -p serprog:dev=/dev/ttyACM0:spispeed=20M -w image.bin
+```
+
+flashrom normally performs verification as part of a successful write operation.
+
+### 5. Explicit erase
+
+> **Warning:** this destroys the existing flash contents. It is usually unnecessary before `-w`, because flashrom handles the required erase/write sequence.
+
+```bash
+sudo flashrom -p serprog:dev=/dev/ttyACM0:spispeed=20M -E
+```
+
+### Troubleshooting
+
+If `/dev/ttyACM0` is not present, reconnect the Pico and check `ls -l /dev/ttyACM*`. If permission is denied, running flashrom through `sudo` as shown above is the simplest first test.
+
+For in-circuit programming, avoid powering the target board and the Pico programmer against each other. See [Hardware and pinout](HARDWARE.md) before connecting a soldered flash device.
+
 ## Documentation
 
 - [Benchmark results](BENCHMARKS.md)
