@@ -45,6 +45,36 @@ The work started by evaluating existing RP2040 serprog implementations and then 
 
 Profiling of the current pipeline showed that USB/TinyUSB service, rather than SPI transfer time, became the dominant remaining bottleneck. Future experiments therefore focus on USB scheduling/service behavior before pursuing higher SPI clocks.
 
+## Firmware source and build
+
+The audited stable source tree is available in **[firmware/stable](firmware/stable/)**. It preserves the upstream licensing files alongside the modified implementation.
+
+Build requirements:
+
+- Raspberry Pi Pico SDK
+- CMake
+- ARM GNU toolchain
+
+A typical build from the repository root is:
+
+```bash
+cd firmware/stable
+mkdir -p build
+cd build
+cmake .. -DPICO_SDK_PATH="$HOME/pico-sdk"
+cmake --build . -j"$(nproc)"
+```
+
+The resulting `pico_serprog.uf2` can be copied to a Raspberry Pi Pico while it is mounted in **BOOTSEL** mode. After reboot, the firmware enumerates as a TinyUSB CDC device and can be used by flashrom through the serprog programmer interface.
+
+Example host invocation:
+
+```bash
+sudo flashrom -p serprog:dev=/dev/ttyACM0:spispeed=20M
+```
+
+The stable prebuilt UF2 is distributed separately through the repository's **GitHub Releases**, allowing the source tree to remain free of build artifacts. Verify the published SHA-256 before flashing.
+
 ## Documentation
 
 - [Benchmark results](BENCHMARKS.md)
