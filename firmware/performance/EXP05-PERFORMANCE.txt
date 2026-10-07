@@ -1,0 +1,56 @@
+EXP05 PERFORMANCE
+=================
+
+Status:
+  VALIDADO - 7/7 chips
+
+Configuração:
+  RP2040 SYS/PERI : 120 MHz
+  SPI recomendado : 20 MHz
+  DMA             : habilitado
+  Pipeline        : 2 x 4096 bytes
+  TinyUSB CDC RX  : 4096
+  TinyUSB CDC TX  : 4096
+  TinyUSB EP      : 4096
+
+Alteração EXP05:
+  PICO_RP2040_USB_DEVICE_UFRAME_FIX=0
+  PICO_RP2040_USB_FAST_IRQ=1
+
+UF2 SHA256:
+  aa0ab1317e8a874d633f3fce0ef96ee238cc9a62a3f0439296f8915371707684
+
+W25Q64FV:
+  Stable : 14.102 s / 580.9 KiB/s
+  EXP05  : ~11.52 s / ~711 KiB/s
+  ganho  : ~22.4%
+
+Banco EXP05:
+  S25FL032P      :  7.099 s / 577.0 KiB/s
+  MX25L3233F     :  7.416 s / 552.3 KiB/s
+  MX25L6406E     : 10.985 s / 745.7 KiB/s
+  EN25Q64        : 11.235 s / 729.1 KiB/s
+  W25Q64FV       : 11.537 s / 710.1 KiB/s
+  W25Q128FV      : 21.674 s / 755.9 KiB/s
+  MX25L12835F    : 26.518 s / 617.8 KiB/s
+
+Integridade:
+  7/7 chips OK
+  tamanho correto
+  SHA256 correto
+
+IMPORTANTE:
+  Esta é uma variante PERFORMANCE.
+
+  O workaround RP2040 USB Device UFRAME / Errata 15 está
+  DESABILITADO.
+
+  Isso aumenta significativamente o throughput Bulk IN,
+  porém pode reduzir compatibilidade com determinados
+  hosts/hubs USB.
+
+  A versão Stable com o workaround habilitado deve continuar
+  disponível como opção de máxima compatibilidade.
+
+NÃO MODIFICAR ESTE SNAPSHOT.
+Novos experimentos devem partir de uma cópia.
