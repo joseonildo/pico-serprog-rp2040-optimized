@@ -8,7 +8,8 @@ The current stable configuration is:
 
 - RP2040 system/peripheral clock: **120 MHz**
 - hardware SPI (spi0)
-- default SPI clock: **20 MHz exact**
+- firmware startup SPI clock: **12 MHz exact**
+- recommended stable host-selected SPI clock: **20 MHz exact** via `spispeed=20M`
 - DMA-assisted transfers
 - double pipeline buffer: **2 x 4096 bytes**
 - TinyUSB CDC RX/TX/endpoint buffers: **4096 bytes**
@@ -18,7 +19,7 @@ Reference result with a Winbond W25Q64FV (8 MiB):
 
 **14.116 s — 580.3 KiB/s — SHA-256 verified**
 
-A 30 MHz SPI clock remains useful for experiments, but 20 MHz was selected as the stable default because it produced essentially identical end-to-end throughput while providing more electrical margin. An EON EN25Q64 exposed the practical difference: it was nondeterministic at 30 MHz in the test setup and verified correctly at 20 MHz after the clip/contact path was corrected.
+A 30 MHz SPI clock remains useful for experiments, but 20 MHz was selected as the stable operating clock for the published benchmarks because it produced essentially identical end-to-end throughput while providing more electrical margin. An EON EN25Q64 exposed the practical difference: it was nondeterministic at 30 MHz in the test setup and verified correctly at 20 MHz after the clip/contact path was corrected.
 
 
 ## Tested SPI NOR chips — hardware/software comparison
@@ -37,7 +38,7 @@ Seven physical SPI NOR devices from multiple manufacturers were used in the benc
 
 In this test bank, **Neo Programmer was used with CH341A hardware**, while the optimized implementation ran on a **Raspberry Pi Pico / RP2040**. The RP2040 setup completed full-chip reads approximately **4.28x to 6.65x faster than the Neo Programmer + CH341A reference**, while producing the expected SHA-256 images.
 
-The EN25Q64 and W25Q64FV entries also demonstrate why **20 MHz is the stable default**: both retained excellent end-to-end throughput at the lower SPI clock, while providing greater electrical margin. More detailed results, including CH341A + flashrom measurements, are available in [BENCHMARKS.md](BENCHMARKS.md).
+The EN25Q64 and W25Q64FV entries also demonstrate why **20 MHz is the recommended stable operating clock**: both retained excellent end-to-end throughput at the lower SPI clock, while providing greater electrical margin. More detailed results, including CH341A + flashrom measurements, are available in [BENCHMARKS.md](BENCHMARKS.md).
 
 ## Why this project exists
 
@@ -70,7 +71,7 @@ The resulting `pico_serprog.uf2` can be copied to a Raspberry Pi Pico while it i
 Example host invocation:
 
 ```bash
-sudo flashrom -p serprog:dev=/dev/ttyACM0:spispeed=20M
+sudo flashrom -p serprog:dev=/dev/ttyACM0,spispeed=20M
 ```
 
 The stable prebuilt UF2 is distributed separately through the repository's **GitHub Releases**, allowing the source tree to remain free of build artifacts. Verify the published SHA-256 before flashing.
@@ -90,7 +91,7 @@ ls -l /dev/ttyACM*
 Start with detection only. This does not intentionally modify the flash contents:
 
 ```bash
-sudo flashrom -p serprog:dev=/dev/ttyACM0:spispeed=20M
+sudo flashrom -p serprog:dev=/dev/ttyACM0,spispeed=20M
 ```
 
 flashrom should report the detected SPI NOR chip. The exact chip name depends on flashrom's database.
@@ -100,7 +101,7 @@ flashrom should report the detected SPI NOR chip. The exact chip name depends on
 Always make a backup before erase/write operations:
 
 ```bash
-sudo flashrom -p serprog:dev=/dev/ttyACM0:spispeed=20M -r backup.bin
+sudo flashrom -p serprog:dev=/dev/ttyACM0,spispeed=20M -r backup.bin
 ```
 
 Calculate its SHA-256:
@@ -114,8 +115,8 @@ sha256sum backup.bin
 Two identical independent reads are a useful basic check of the programmer, wiring and contacts:
 
 ```bash
-sudo flashrom -p serprog:dev=/dev/ttyACM0:spispeed=20M -r backup-1.bin
-sudo flashrom -p serprog:dev=/dev/ttyACM0:spispeed=20M -r backup-2.bin
+sudo flashrom -p serprog:dev=/dev/ttyACM0,spispeed=20M -r backup-1.bin
+sudo flashrom -p serprog:dev=/dev/ttyACM0,spispeed=20M -r backup-2.bin
 sha256sum backup-1.bin backup-2.bin
 cmp backup-1.bin backup-2.bin && echo "OK: reads are identical"
 ```
@@ -127,7 +128,7 @@ If the hashes differ, **do not erase or write the chip**. Check the clip/socket,
 > **Warning:** the following command modifies the SPI flash. Confirm that the image is correct for the target device and keep a verified backup first.
 
 ```bash
-sudo flashrom -p serprog:dev=/dev/ttyACM0:spispeed=20M -w image.bin
+sudo flashrom -p serprog:dev=/dev/ttyACM0,spispeed=20M -w image.bin
 ```
 
 flashrom normally performs verification as part of a successful write operation.
@@ -137,7 +138,7 @@ flashrom normally performs verification as part of a successful write operation.
 > **Warning:** this destroys the existing flash contents. It is usually unnecessary before `-w`, because flashrom handles the required erase/write sequence.
 
 ```bash
-sudo flashrom -p serprog:dev=/dev/ttyACM0:spispeed=20M -E
+sudo flashrom -p serprog:dev=/dev/ttyACM0,spispeed=20M -E
 ```
 
 ### Troubleshooting
