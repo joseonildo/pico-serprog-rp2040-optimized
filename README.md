@@ -96,6 +96,14 @@ sudo flashrom -p serprog:dev=/dev/ttyACM0,spispeed=20M
 
 flashrom should report the detected SPI NOR chip. The exact chip name depends on flashrom's database.
 
+If flashrom reports multiple matching chip definitions and asks you to specify one, repeat the command with the exact chip name using `-c`:
+
+```bash
+sudo flashrom -p serprog:dev=/dev/ttyACM0,spispeed=20M -c "EXACT_CHIP_NAME"
+```
+
+Use the exact name printed by flashrom. For example, if it reports `W25Q64JV-.Q` as the appropriate definition, use `-c "W25Q64JV-.Q"`. The `-c` option is only needed when selecting a specific chip definition; it should not be copied blindly for a different SPI NOR device.
+
 ### 2. Read a backup
 
 Always make a backup before erase/write operations:
