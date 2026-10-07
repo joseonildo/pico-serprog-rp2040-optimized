@@ -20,6 +20,25 @@ Reference result with a Winbond W25Q64FV (8 MiB):
 
 A 30 MHz SPI clock remains useful for experiments, but 20 MHz was selected as the stable default because it produced essentially identical end-to-end throughput while providing more electrical margin. An EON EN25Q64 exposed the practical difference: it was nondeterministic at 30 MHz in the test setup and verified correctly at 20 MHz after the clip/contact path was corrected.
 
+
+## Tested SPI NOR chips — comparison with Neo Programmer
+
+Seven physical SPI NOR devices from multiple manufacturers were used in the benchmark bank. Reads from the RP2040 programmer were validated against known SHA-256 reference images.
+
+| SPI NOR | Size | Neo Programmer | RP2040 optimized | Speed-up vs Neo | Verification |
+|---|---:|---:|---:|---:|---|
+| Spansion S25FL032A/P | 4 MiB | 39.034 s | 9.087 s @ 30 MHz | **4.30x** | SHA-256 exact |
+| Macronix MX25L3233F | 4 MiB | 38.849 s | 9.071 s @ 30 MHz | **4.28x** | SHA-256 exact |
+| Macronix MX25L6406E | 8 MiB | 91.975 s | 14.104 s @ 30 MHz | **6.52x** | SHA-256 exact |
+| EON EN25Q64 | 8 MiB | 90.173 s | 14.109 s @ 20 MHz | **6.39x** | SHA-256 exact |
+| Winbond W25Q64FV | 8 MiB | 88.069 s | 14.116 s @ 20 MHz | **6.24x** | SHA-256 exact |
+| Winbond W25Q128FV | 16 MiB | 180.771 s | 27.195 s @ 30 MHz | **6.65x** | SHA-256 exact |
+| Macronix MX25L12835F | 16 MiB | 145.152 s | 30.216 s @ 30 MHz | **4.80x** | SHA-256 exact |
+
+In this test bank, the optimized RP2040 programmer completed full-chip reads approximately **4.28x to 6.65x faster than Neo Programmer**, while producing the expected SHA-256 images.
+
+The EN25Q64 and W25Q64FV entries also demonstrate why **20 MHz is the stable default**: both retained excellent end-to-end throughput at the lower SPI clock, while providing greater electrical margin. More detailed results, including CH341A + flashrom measurements, are available in [BENCHMARKS.md](BENCHMARKS.md).
+
 ## Why this project exists
 
 The work started by evaluating existing RP2040 serprog implementations and then measuring each bottleneck instead of assuming that SPI clock alone determined performance. The optimization path moved from PIO/hardware-SPI comparisons through larger USB buffers, exact RP2040 clocking, DMA and pipelining.
