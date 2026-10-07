@@ -21,11 +21,11 @@ Reference result with a Winbond W25Q64FV (8 MiB):
 A 30 MHz SPI clock remains useful for experiments, but 20 MHz was selected as the stable default because it produced essentially identical end-to-end throughput while providing more electrical margin. An EON EN25Q64 exposed the practical difference: it was nondeterministic at 30 MHz in the test setup and verified correctly at 20 MHz after the clip/contact path was corrected.
 
 
-## Tested SPI NOR chips — comparison with Neo Programmer
+## Tested SPI NOR chips — hardware/software comparison
 
 Seven physical SPI NOR devices from multiple manufacturers were used in the benchmark bank. Reads from the RP2040 programmer were validated against known SHA-256 reference images.
 
-| SPI NOR | Size | Neo Programmer | RP2040 optimized | Speed-up vs Neo | Verification |
+| SPI NOR | Size | CH341A hardware + Neo Programmer | Raspberry Pi Pico / RP2040 + optimized pico-serprog | Speed-up vs Neo/CH341A | Verification |
 |---|---:|---:|---:|---:|---|
 | Spansion S25FL032A/P | 4 MiB | 39.034 s | 9.087 s @ 30 MHz | **4.30x** | SHA-256 exact |
 | Macronix MX25L3233F | 4 MiB | 38.849 s | 9.071 s @ 30 MHz | **4.28x** | SHA-256 exact |
@@ -35,7 +35,7 @@ Seven physical SPI NOR devices from multiple manufacturers were used in the benc
 | Winbond W25Q128FV | 16 MiB | 180.771 s | 27.195 s @ 30 MHz | **6.65x** | SHA-256 exact |
 | Macronix MX25L12835F | 16 MiB | 145.152 s | 30.216 s @ 30 MHz | **4.80x** | SHA-256 exact |
 
-In this test bank, the optimized RP2040 programmer completed full-chip reads approximately **4.28x to 6.65x faster than Neo Programmer**, while producing the expected SHA-256 images.
+In this test bank, **Neo Programmer was used with CH341A hardware**, while the optimized implementation ran on a **Raspberry Pi Pico / RP2040**. The RP2040 setup completed full-chip reads approximately **4.28x to 6.65x faster than the Neo Programmer + CH341A reference**, while producing the expected SHA-256 images.
 
 The EN25Q64 and W25Q64FV entries also demonstrate why **20 MHz is the stable default**: both retained excellent end-to-end throughput at the lower SPI clock, while providing greater electrical margin. More detailed results, including CH341A + flashrom measurements, are available in [BENCHMARKS.md](BENCHMARKS.md).
 
