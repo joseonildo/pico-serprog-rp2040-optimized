@@ -1,0 +1,23 @@
+# Build output
+build/
+*.elf
+*.hex
+*.bin
+*.uf2
+*.map
+
+# Flash dumps / backups
+*.rom
+*.dump
+*.bak
+
+# Local experimental backups
+*.original
+*.before-*
+*.pre-*
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
