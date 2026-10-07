@@ -14,7 +14,7 @@ At 30 MHz the same W25Q64FV measured 14.104 s / 580.8 KiB/s. The difference was 
 
 ## Benchmark bank
 
-| SPI NOR | Size | CH341A + flashrom | Neo Programmer | RP2040 optimized | Result |
+| SPI NOR | Size | CH341A hardware + flashrom | CH341A hardware + Neo Programmer | Raspberry Pi Pico / RP2040 + optimized pico-serprog | Result |
 |---|---:|---:|---:|---:|---|
 | Spansion S25FL032A/P | 4 MiB | 38.809 s | 39.034 s | 9.087 s @ 30 MHz | SHA exact |
 | Macronix MX25L3233F | 4 MiB | 39.191 s | 38.849 s | 9.071 s @ 30 MHz | SHA exact |
@@ -45,4 +45,4 @@ Profiling after pipelining showed that USB transmission/service accounted for ro
 
 ## Comparison caveat
 
-CH341A and Neo Programmer results were collected as practical reference points using the same physical chips. The software stacks and protocols are different, so the comparison represents end-to-end user-observed read time rather than a synthetic bus-level comparison.
+Both reference columns used **CH341A hardware**: one with **flashrom** and the other with **Neo Programmer**. The optimized implementation used a **Raspberry Pi Pico / RP2040** running the project's pico-serprog firmware. Results were collected as practical reference points using the same physical chips. The software stacks and protocols are different, so the comparison represents end-to-end user-observed read time rather than a synthetic bus-level comparison.
