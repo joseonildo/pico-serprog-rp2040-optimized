@@ -183,3 +183,12 @@ Your sponsorship helps fund hardware testing, improvements, maintenance and futu
 The firmware lineage is GPLv3. This repository preserves upstream copyright and licensing requirements. See [CREDITS.md](CREDITS.md) before redistributing code or media.
 
 This project is an optimization and benchmarking effort built on prior open-source work; it does not claim authorship of the original pico-serprog implementation.
+
+## Current Release UF2 SHA256
+
+Checksums of the currently published GitHub Release assets:
+
+- Stable (`pico-serprog-rp2040-optimized-stable.uf2`): `e5acf64e9bdff478757e6b7413f7170c24b289fabdc95b135461aee7f8d832d7`
+- Performance (`pico-serprog-rp2040-performance.uf2`): `3b0528c644b75869fe5d7c17a6b264bddaecc8b8c6fad9b59af56e9e52bcf2c3`
+
+These checksums refer to the current published binaries. Historical experiment records retain their original checksums.
