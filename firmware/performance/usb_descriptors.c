@@ -24,6 +24,7 @@
  */
 
 #include "tusb.h"
+#include "pico/usb_reset.h"
 
 /* A combination of interfaces must have a unique product id, since PC will save device driver after the first plug.
  * Same VID/PID with different interface e.g MSC (first), then CDC (later) will possibly cause system error on PC.
@@ -76,10 +77,11 @@ enum
 {
   ITF_NUM_CDC_0 = 0,
   ITF_NUM_CDC_0_DATA,
+  ITF_NUM_RPI_RESET,
   ITF_NUM_TOTAL
 };
 
-#define CONFIG_TOTAL_LEN    (TUD_CONFIG_DESC_LEN + CFG_TUD_CDC * TUD_CDC_DESC_LEN)
+#define CONFIG_TOTAL_LEN    (TUD_CONFIG_DESC_LEN + CFG_TUD_CDC * TUD_CDC_DESC_LEN + TUD_RPI_RESET_DESC_LEN)
 
 #if CFG_TUSB_MCU == OPT_MCU_LPC175X_6X || CFG_TUSB_MCU == OPT_MCU_LPC177X_8X || CFG_TUSB_MCU == OPT_MCU_LPC40XX
   // LPC 17xx and 40xx endpoint type (bulk/interrupt/iso) are fixed by its number
@@ -120,6 +122,7 @@ uint8_t const desc_fs_configuration[] =
 
   // 1st CDC: Interface number, string index, EP notification address and size, EP data address (out, in) and size.
   TUD_CDC_DESCRIPTOR(ITF_NUM_CDC_0, 4, EPNUM_CDC_0_NOTIF, 8, EPNUM_CDC_0_OUT, EPNUM_CDC_0_IN, 64),
+  TUD_RPI_RESET_DESCRIPTOR(ITF_NUM_RPI_RESET, 5),
 };
 
 #if TUD_OPT_HIGH_SPEED
@@ -130,6 +133,7 @@ uint8_t const desc_hs_configuration[] =
 
   // 1st CDC: Interface number, string index, EP notification address and size, EP data address (out, in) and size.
   TUD_CDC_DESCRIPTOR(ITF_NUM_CDC_0, 4, EPNUM_CDC_0_NOTIF, 8, EPNUM_CDC_0_OUT, EPNUM_CDC_0_IN, 512),
+  TUD_RPI_RESET_DESCRIPTOR(ITF_NUM_RPI_RESET, 5),
 };
 #endif
 
@@ -160,6 +164,7 @@ char const* string_desc_arr [] =
   "TinyUSB Device",              // 2: Product
   "123456",                      // 3: Serials, should use chip ID
   "TinyUSB CDC",                 // 4: CDC Interface
+  "RP2040 Reset",                // 5: Reset Interface
 };
 
 static uint16_t _desc_str[32];
